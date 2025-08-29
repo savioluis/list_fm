@@ -4,7 +4,7 @@ import 'package:list_fm/core/constants/app_constants.dart';
 import 'package:list_fm/features/search_user/data/data_sources/remote/user_remote_data_source.dart';
 import 'package:list_fm/features/search_user/data/repositories/user_repository.dart';
 import 'package:list_fm/features/search_user/domain/repositories/i_user_repository.dart';
-import 'features/search_user/domain/usercases/get_user_usecase.dart';
+import 'features/search_user/domain/usercases/search_user_usecase.dart';
 import 'features/search_user/presentation/stores/search_user_store.dart';
 
 final getIt = GetIt.instance;
