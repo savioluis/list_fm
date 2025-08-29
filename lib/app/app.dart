@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:list_fm/features/home/presentation/home_page.dart';
+import 'package:list_fm/core/theme/app_theme.dart';
 import 'package:list_fm/features/search_user/presentation/pages/search_user_page.dart';
 
 class ListFMApp extends StatelessWidget {
@@ -13,8 +13,8 @@ class ListFMApp extends StatelessWidget {
         '/': (_) => SearchUserPage(),
       },
       initialRoute: '/',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: AppTheme.lightTheme(),
+      darkTheme: AppTheme.darkTheme(),
       themeMode: ThemeMode.system,
     );
   }
