@@ -1,15 +1,13 @@
 import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:list_fm/core/theme/color/color_extension.dart';
-import 'package:list_fm/core/theme/theme_extension.dart';
-import 'package:list_fm/core/util/date_time_util.dart';
 import 'package:list_fm/core/widgets/listfm_text_field.dart';
 import 'package:list_fm/features/search_user/presentation/stores/search_user_state.dart';
 import 'package:list_fm/features/search_user/presentation/stores/search_user_store.dart';
 import 'package:list_fm/features/search_user/presentation/widgets/home_app_bar.dart';
+import 'package:list_fm/features/search_user/presentation/widgets/initial_display_widget.dart';
 import 'package:list_fm/features/search_user/presentation/widgets/not_found_display_widget.dart';
 import 'package:list_fm/features/search_user/presentation/widgets/user_card.dart';
 import 'package:list_fm/injections.dart';
@@ -102,7 +100,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
                                     )
                                   : Icon(
                                       Icons.search,
-                                      color: context.whiteColor,
+                                      color: context.onPrimaryColor,
                                       size: 32,
                                     ),
                             ),
@@ -114,13 +112,28 @@ class _SearchUserPageState extends State<SearchUserPage> {
                 ),
               ),
 
-              if (state is SearchUserInitialState && state.searchNotFound)
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 24, right: 24, bottom: 180),
-                    child: NotFoundDisplayWidget(isCentered: true),
-                  ),
-                ),
+              if (state is SearchUserInitialState)
+                state.searchNotFound
+                    ? Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: 24,
+                            right: 24,
+                            bottom: Scaffold.of(context).appBarMaxHeight!,
+                          ),
+                          child: NotFoundDisplayWidget(isCentered: true),
+                        ),
+                      )
+                    : Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: 24,
+                            right: 24,
+                            bottom: Scaffold.of(context).appBarMaxHeight!,
+                          ),
+                          child: InitialDisplayWidget(),
+                        ),
+                      ),
 
               if (state is SearchUserSuccessState) ...[
                 Expanded(
@@ -183,7 +196,10 @@ class _SearchUserPageState extends State<SearchUserPage> {
               if (state is SearchUserLoadingState)
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 36, bottom: 180),
+                    padding: EdgeInsets.only(
+                      top: 36,
+                      bottom: Scaffold.of(context).appBarMaxHeight!,
+                    ),
                     child: Center(
                       child: CircularProgressIndicator(
                         color: context.secondaryColor,
