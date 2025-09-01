@@ -91,22 +91,20 @@ class _SearchUserPageState extends State<SearchUserPage> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
-                              child:
-                                  //  state is SearchUserLoadingState
-                                  //     ? SizedBox(
-                                  //         height: 16,
-                                  //         width: 16,
-                                  //         child: CircularProgressIndicator(
-                                  //           color: context.onPrimaryColor,
-                                  //           strokeWidth: 2,
-                                  //         ),
-                                  //       )
-                                  //     :
-                                  Icon(
-                                    Icons.search,
-                                    color: context.whiteColor,
-                                    size: 32,
-                                  ),
+                              child: (state is SearchUserSuccessState && state.isLoadingMore)
+                                  ? SizedBox(
+                                      height: 16,
+                                      width: 16,
+                                      child: CircularProgressIndicator(
+                                        color: context.onPrimaryColor,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : Icon(
+                                      Icons.search,
+                                      color: context.whiteColor,
+                                      size: 32,
+                                    ),
                             ),
                           ),
                         ),
@@ -135,6 +133,7 @@ class _SearchUserPageState extends State<SearchUserPage> {
                     ),
                     child: SizedBox(
                       child: ListView.separated(
+                        clipBehavior: Clip.hardEdge,
                         itemCount: state.users!.length + (state.searchNotFound ? 1 : 0) + (state.isLoadingMore ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index < state.users!.length) {
@@ -182,11 +181,13 @@ class _SearchUserPageState extends State<SearchUserPage> {
               ],
 
               if (state is SearchUserLoadingState)
-                Padding(
-                  padding: const EdgeInsets.only(top: 36),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: context.secondaryColor,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 36, bottom: 180),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: context.secondaryColor,
+                      ),
                     ),
                   ),
                 ),
