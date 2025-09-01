@@ -10,7 +10,7 @@ abstract class UserRemoteDataSource {
 
   @GET('')
   Future<HttpResponse<UserModel>> getUserByName({
-    @Query('method') method = 'user.getinfo',
+    @Query('method') String? method = 'user.getinfo',
     @Query('user') String? name,
   });
 }

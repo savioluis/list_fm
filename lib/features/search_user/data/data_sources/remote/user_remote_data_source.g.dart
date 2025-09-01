@@ -19,14 +19,11 @@ class _UserRemoteDataSource implements UserRemoteDataSource {
 
   @override
   Future<HttpResponse<UserModel>> getUserByName({
-    dynamic method = 'user.getinfo',
+    String? method = 'user.getinfo',
     String? name,
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'method': method,
-      r'user': name,
-    };
+    final queryParameters = <String, dynamic>{r'method': method, r'user': name};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
