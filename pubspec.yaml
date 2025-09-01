@@ -15,6 +15,7 @@ dependencies:
   flutter_mobx: ^2.3.0
   get_it: ^8.2.0
   google_fonts: ^6.3.1
+  hugeicons: ^0.0.11
   json_annotation: ^4.9.0
   mobx: ^2.5.0
   mobx_codegen: ^2.7.2
