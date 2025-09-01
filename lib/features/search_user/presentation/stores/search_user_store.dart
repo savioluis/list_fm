@@ -32,40 +32,39 @@ abstract class _SearchUserStore with Store {
     final result = await _getUserUsecase.call(params: username);
 
     if (result is NetworkDataSuccess) {
-      if (currentState is SearchUserSuccessState) {
-        final userAlreadyFetched = currentState.users!.any((user) => user.name == username);
-
-        userAlreadyFetched
-            ? state = currentState.copyWith(userAlreadyFetched: true)
-            : state = SearchUserSuccessState(
-                users: [...currentState.users ?? [], ?result.data],
-                searchNotFound: false,
-                userAlreadyFetched: false,
-                isLoadingMore: false,
-              );
-        return;
-      } else if (currentState is SearchUserInitialState || currentState is SearchUserLoadingState) {
+      if (currentState is! SearchUserSuccessState) {
         state = SearchUserSuccessState(
           users: [...currentState.users ?? [], ?result.data],
           searchNotFound: false,
         );
         return;
       }
+
+      final userAlreadyFetched = currentState.users!.any((user) => user.name == username);
+
+      userAlreadyFetched
+          ? state = currentState.copyWith(userAlreadyFetched: true)
+          : state = SearchUserSuccessState(
+              users: [...currentState.users ?? [], ?result.data],
+              searchNotFound: false,
+              userAlreadyFetched: false,
+              isLoadingMore: false,
+            );
+
+      return;
     } else if (result is NetworkDataFailure) {
       final isNotFoundError = (result.error!.response?.data["error"] == 6);
 
-      if (currentState is SearchUserSuccessState) {
-        if (isNotFoundError) {
-          state = currentState.copyWith(searchNotFound: true);
-          return;
-        }
-      } else {
-        if (isNotFoundError) {
+      if (isNotFoundError) {
+        if (currentState is! SearchUserSuccessState) {
           state = SearchUserInitialState(searchNotFound: true);
         } else {
-          state = SearchUserFailureState(error: result.error);
+          state = currentState.copyWith(searchNotFound: true);
         }
+        return;
       }
+
+      state = SearchUserFailureState(error: result.error);
     }
   }
 }
