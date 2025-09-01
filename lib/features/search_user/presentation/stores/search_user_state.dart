@@ -15,7 +15,9 @@ sealed class SearchUserState extends Equatable {
 }
 
 class SearchUserInitialState extends SearchUserState {
-  const SearchUserInitialState();
+  const SearchUserInitialState({this.searchNotFound = false});
+
+  final bool searchNotFound;
 }
 
 class SearchUserLoadingState extends SearchUserState {
@@ -23,17 +25,37 @@ class SearchUserLoadingState extends SearchUserState {
 }
 
 class SearchUserSuccessState extends SearchUserState {
-  final List<UserEntity>? selectedUsers;
+  final bool searchNotFound;
+  final bool isLoadingMore;
+  final bool userAlreadyFetched;
 
-  const SearchUserSuccessState({this.selectedUsers, super.users});
+  const SearchUserSuccessState({
+    this.isLoadingMore = false,
+    this.searchNotFound = false,
+    this.userAlreadyFetched = false,
+    super.users,
+  });
 
   SearchUserSuccessState copyWith({
-    List<UserEntity>? selectedUsers,
+    bool? searchNotFound,
+    bool? isLoadingMore,
+    bool? userAlreadyFetched,
   }) {
     return SearchUserSuccessState(
-      selectedUsers: selectedUsers ?? this.selectedUsers,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      searchNotFound: searchNotFound ?? this.searchNotFound,
+      userAlreadyFetched: userAlreadyFetched ?? this.userAlreadyFetched,
+      users: super.users,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    searchNotFound,
+    isLoadingMore,
+    userAlreadyFetched,
+    super.users,
+  ];
 }
 
 class SearchUserFailureState extends SearchUserState {
